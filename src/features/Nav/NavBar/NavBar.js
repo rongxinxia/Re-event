@@ -27,10 +27,11 @@ class NavBar extends Component{
                   <Menu inverted fixed="top">
                     <Container>
                       <Menu.Item as={Link} to='/' header >
-                        <img src="../../../../public/assets/logo.png" alt="logo" />
+                        <img src="../assets/logo.png" alt="logo" />
                         Re-vents
                       </Menu.Item>
                       <Menu.Item as={Link} to='/events' name="Events" />
+                      <Menu.Item as={Link} to='/test' name="Test" />
                       {this.state.auth && <Menu.Item as={Link} to='/people' name="People" />}
                       {this.state.auth && <Menu.Item>
                         <Button as={Link} to='/createEvent' floated="right" positive inverted content="Create Event" />

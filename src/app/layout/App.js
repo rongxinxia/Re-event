@@ -9,6 +9,7 @@ import UserDetailsPage from '../../features/user/UserDetails/UserDetailsPage';
 import SettingDashboard from '../../features/user/Settings/SettingDashboard';
 import EventForm from '../../features/events/EventForm/EventForm';
 import HomePage from '../../features/home/HomePage';
+import test from '../../features/test/test';
 
 
 //import logo from '../../logo.svg';
@@ -32,6 +33,7 @@ class App extends Component {
             <Route path='/profile/:id' component={UserDetailsPage}/>
             <Route path='/settings' component={SettingDashboard}/>
             <Route path='/createEvent' component={EventForm}/>
+            <Route path='/test' component={test}/>
           </Switch>
           </Container>
         </div>
