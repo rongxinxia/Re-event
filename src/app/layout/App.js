@@ -10,6 +10,7 @@ import SettingDashboard from '../../features/user/Settings/SettingDashboard';
 import EventForm from '../../features/events/EventForm/EventForm';
 import HomePage from '../../features/home/HomePage';
 import test from '../../features/test/test';
+import ModalManager from '../../features/modal/modalManager'
 
 
 //import logo from '../../logo.svg';
@@ -19,6 +20,7 @@ class App extends Component {
   render() {
     return (
       <div>
+        <ModalManager/>
         <Switch>
         <Route exact path='/' component={HomePage}/>
         </Switch>
