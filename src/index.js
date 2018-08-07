@@ -8,10 +8,12 @@ import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from 'react-router-dom';
 import {configureStore} from './app/store/configureStore'
 import Scroll  from './app/common/util/scroll';
+import {loadEvents} from './features/events/eventActions'
 
 const root = document.getElementById('root');
 
 const store = configureStore();
+store.dispatch(loadEvents())
 
 let render = () =>{
     ReactDOM.render(

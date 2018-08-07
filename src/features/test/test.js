@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import {increment_Counter,decrement_Counter} from './testActions'
+import {incrementAsync,decrementAsync} from './testActions'
 import {Button} from 'semantic-ui-react'
 import  Script from 'react-load-script'
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-places-autocomplete'
@@ -33,6 +33,8 @@ class test extends Component {
       onChange: this.onChange,
     }
 
+    console.log(this.props.loading)
+
     return (
       <div>
           <Script
@@ -40,8 +42,8 @@ class test extends Component {
             onLoad = {this.handleStriptLoad}
           />
           <h1> this is {this.props.data}</h1>
-          <Button onClick={this.props.increment_Counter}>add</Button>
-          <Button onClick={this.props.decrement_Counter}>substract</Button>
+          <Button loading={this.props.loading} onClick={this.props.incrementAsync} content='add' color='green'/>
+          <Button loading={this.props.loading}  onClick={this.props.decrementAsync}>substract</Button>
           <Button onClick={()=>this.props.openModal('TestModal',{data:32})}>Modal</Button>
           <br/><br/>
           <form onSubmit={this.handleFormSubmit}>
@@ -55,10 +57,11 @@ class test extends Component {
   }
 }
 
-const actions={increment_Counter,decrement_Counter,openModal};
+const actions={incrementAsync,decrementAsync,openModal};
 
 const mapState=(state)=>({
-    data: state.test.data
+    data: state.test.data,
+    loading: state.test.loading
 });
 
 

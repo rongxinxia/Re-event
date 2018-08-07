@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import {openModal} from '../../modal/modalActions'
-import {Menu,Container,Button} from 'semantic-ui-react';
+import {Menu,Container,Button} from 'semantic-ui-react/dist/commonjs';
 import {Link, withRouter} from 'react-router-dom';
 import SignoutMenu from '../Menu/SignoutMenu';
 import SigninMenu from '../Menu/SigninMenu';
