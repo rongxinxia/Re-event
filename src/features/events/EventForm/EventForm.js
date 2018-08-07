@@ -130,7 +130,16 @@ class EventForm extends Component {
                 {this.state.scriptLoaded && 
                 <Field name='venue' type='text' component={PlaceInput} options={{location:new google.maps.LatLng(this.state.citylag),radius:10000,types:['establishment']}}placeholder='Event Venue' onSelect={this.handleVenueSelect}/>
                 }
-                <Field name='date' type='text' component={DateInput} dateFormat="YYYY-DD-MM HH:mm" timeFormat="HH:mm" placeholder='Event Date'/>
+                <Field
+                name="date"
+                type="text"
+                component={DateInput}
+                dateFormat="YYYY-MM-DD HH:mm"
+                timeFormat="HH:mm"
+                showTimeSelect
+                placeholder="Date and Time of Event"
+              />
+                
                   <Button positive disabled={invalid||submitting||pristine} type="submit">
                     Submit
                   </Button>
