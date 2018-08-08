@@ -15,6 +15,7 @@ class EventDetailsInfo extends Component {
   };
   render() {
     const {event} = this.props;
+    //console.log(event)
     return (
       <Segment.Group>
          <Segment attached="top">
@@ -50,7 +51,9 @@ class EventDetailsInfo extends Component {
              </Grid.Column>
            </Grid>
          </Segment>
-         {this.state.showMap && <EventDetailsMap lat={event.venueLatLng}/>}
+         {this.state.showMap && (
+          <EventDetailsMap lat={event.venueLatLng.lat} lng={event.venueLatLng.lng} />
+        )}
        </Segment.Group>
  )
   }

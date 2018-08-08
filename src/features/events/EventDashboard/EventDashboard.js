@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {deleteEvent} from '../eventActions';
 import LoadingComponent from '../../../app/layout/loadingComponent'
 import EventActivity from '../EventActivity/EventActivity'
+import {firestoreConnect} from 'react-redux-firebase'
 
 class EventDashboard extends Component {
     state = {
@@ -12,36 +13,10 @@ class EventDashboard extends Component {
         selectedEvent:null
     };
 
-    //handleFormCancel=()=>{
-      //  this.setState({isOpen:false})
-   //}
-
-    /*handleNewEvent=(newEvent)=>{
-        newEvent.id=cuid();
-        newEvent.hostPhotoURL='/assets/user.png';
-        this.props.createEvent(newEvent);
-        this.setState({isOpen:false})
-    }*/
-
-    /*handleEditEvent=(newEvent)=>{
-        this.setState({
-            selectedEvent:newEvent,
-            isOpen:true
-        });
-    }*/
-
     handleDeleteEvent=(eventId)=>()=>{
         this.props.deleteEvent(eventId);
     }
 
-    /*handleUpdateEvent=(updateEvent)=>{
-        this.props.updateEvent(updateEvent)
-        this.setState({
-            isOpen:false,
-            selectedEvent:null
-        })
-    }*/
-    
     render(){
         if(this.props.loading){
             return <LoadingComponent inverted={true}/>
@@ -62,10 +37,10 @@ class EventDashboard extends Component {
 const actions={deleteEvent};
 
 const mapState=(state)=>({
-    events: state.events,
+    events: state.firestore.ordered.events,
     loading:state.async.loading
 });
 
 
 
-export default connect(mapState,actions)(EventDashboard);
+export default connect(mapState,actions)(firestoreConnect([{collection:'events'}])(EventDashboard));
