@@ -61,6 +61,7 @@ export const socialLogin = (selectedProvider) =>{
                 provider: selectedProvider,
                 type: 'popup'
             })
+            
             if(user.additionalUserInfo.isNewUser){
                 await firestore.set(`users/${user.user.uid}`,{
                     displayName:user.profile.displayNam,
