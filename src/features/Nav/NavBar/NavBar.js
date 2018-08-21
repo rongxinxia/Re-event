@@ -45,7 +45,7 @@ class NavBar extends Component{
                       {sign && <Menu.Item>
                         <Button as={Link} to='/createEvent' floated="right" positive inverted content="Create Event" />
                       </Menu.Item>}
-                      {sign ? <SigninMenu profile={profile} sign={this.handleSignout}/> : <SignoutMenu sign={this.handleSignin} register={this.handleRegister}/>}
+                      {sign ? <SigninMenu auth={auth} profile={profile} sign={this.handleSignout}/> : <SignoutMenu sign={this.handleSignin} register={this.handleRegister}/>}
                     </Container>
                   </Menu>
         );
