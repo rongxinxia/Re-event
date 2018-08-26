@@ -2,12 +2,12 @@
 import React, { Component } from 'react'
 import {Segment, Form, Button,Grid, Header} from 'semantic-ui-react'
 import {connect} from 'react-redux'
-import {createEvent,updateEvent} from '../eventActions'
+import {withFirestore} from 'react-redux-firebase'
+import {createEvent,updateEvent,cancelEvent} from '../eventActions'
 import {composeValidators,combineValidators,isRequired,hasLengthGreaterThan} from 'revalidate'
-import cuid from 'cuid';
+//import cuid from 'cuid';
 import {reduxForm, Field} from 'redux-form';
 import {geocodeByAddress,getLatLng} from 'react-places-autocomplete'
-import moment from 'moment'
 import Script from 'react-load-script'
 import TextInput from '../../../app/common/form/TextInput';
 import TextArea from '../../../app/common/form/TextArea';
@@ -17,19 +17,16 @@ import PlaceInput from '../../../app/common/form/PlaceInput';
 
 
 
-const mapState =(state, ownProps)=>{
-    const eventId = ownProps.match.params.id;
-
-    let event = {}
-
-    if(eventId && state.events.length>0){
-        event = state.events.filter(event =>event.id===eventId)[0];
+const mapState =(state)=>{
+    let event = {};
+    if(state.firestore.ordered.events && state.firestore.ordered.events[0]){
+        event = state.firestore.ordered.events[0];
     }
-
-    return {initialValues: event}
+    return {initialValues: event,
+    event}
 };
 
-const actions ={createEvent,updateEvent};
+const actions ={createEvent,updateEvent,cancelEvent};
 
 const category = [
     {key: 'drinks', text: 'Drinks', value: 'drinks'},
@@ -78,21 +75,33 @@ class EventForm extends Component {
     scriptLoadedHandler=()=>{
         this.setState({scriptLoaded:true})
     }
+
+    async componentDidMount(){
+        const{firestore, match} = this.props;
+        await firestore.setListener(`events/${match.params.id}`);
+        //if(event.exists){
+          //  this.setState({
+            //    venuelag: event.data().venueLatLng
+           // })
+        //}
+        //console.log(event)
+    }
+
+    async componentWillUnmount(){
+        const{firestore, match} = this.props;
+        await firestore.unsetListener(`events/${match.params.id}`);
+    }
    
     onFormSubmit=values=>{
-        values.date = moment(values.date).format();
         values.venueLatLng = this.state.venuelag;
         if(this.props.initialValues.id){
+            if(Object.keys(values.venueLatLng).length===0){
+                values.venueLatLng = this.props.event.venueLatLng
+            }
             this.props.updateEvent(values);
             this.props.history.goBack();
         }else{
-            const newEvent={
-                ...values,
-                id:cuid(),
-                hostPhotoURL:'/assets/user.png',
-                hostedBy:'Bob'
-            }
-            this.props.createEvent(newEvent);
+            this.props.createEvent(values);
             this.props.history.push('/events');
         }
     }
@@ -111,7 +120,7 @@ class EventForm extends Component {
     }
 
   render() {
-    const {invalid,submitting,pristine} = this.props;
+    const {invalid,submitting,pristine,event} = this.props;
     return (
         <Grid>
              <Script
@@ -144,6 +153,13 @@ class EventForm extends Component {
                     Submit
                   </Button>
                   <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
+                  <Button
+                    onClick={()=>this.props.cancelEvent(!event.cancelled,event.id)}
+                    type='button'
+                    color={event.cancelled ?'green':'red'}
+                    floated='right'
+                    content={event.cancelled ? 'Reacitivated Event':'Cancel Event'}
+                  />
                 </Form>
             </Segment>
             </Grid.Column>
@@ -152,4 +168,4 @@ class EventForm extends Component {
   }
 }
 
-export default connect(mapState,actions)(reduxForm({form: 'eventForm',enableReinitialize:true,validate})(EventForm));
+export default withFirestore(connect(mapState,actions)(reduxForm({form: 'eventForm',enableReinitialize:true,validate})(EventForm)));

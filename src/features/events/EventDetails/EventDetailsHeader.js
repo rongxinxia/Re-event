@@ -16,7 +16,12 @@ const eventImageTextStyle = {
     color: 'white'
 };
 
-const EventDetailsHeader = ({event}) => {
+const EventDetailsHeader = ({event,isHost,isGoing,joinEvent,cancelJoinEvent}) => {
+  let eventDate ;
+  if(event.date){
+    eventDate = event.date.toDate();
+  }
+  //console.log(eventDate)
   return (
        <Segment.Group>
           <Segment basic attached="top" style={{ padding: '0' }}>
@@ -30,7 +35,7 @@ const EventDetailsHeader = ({event}) => {
                       content={event.title}
                       style={{ color: 'white' }}
                     />
-                    <p>{format(event.date,'dddd Do MMMM')} at{" "} {format(event.date, 'HH:mm')}</p>
+                    <p>{format(eventDate,'dddd Do MMMM')} at{" "} {format(eventDate , 'HH:mm')}</p>
                     <p>
                       Hosted by <strong>{event.hostedBy}</strong>
                     </p>
@@ -41,13 +46,11 @@ const EventDetailsHeader = ({event}) => {
           </Segment>
     
           <Segment attached="bottom">
-            <Button>Cancel My Place</Button>
-            <Button color="teal">JOIN THIS EVENT</Button>
-    
-            <Button as={Link} to={`/manage/${event.id}`}color="orange" floated="right">
-              Manage Event
-            </Button>
-          </Segment>
+          {!isHost && isGoing && <Button onClick={()=>cancelJoinEvent(event)}>Cancel My Place</Button>}
+          {!isHost && !isGoing && <Button onClick={()=>joinEvent(event)}color="teal">JOIN THIS EVENT</Button>}
+          {isHost &&<Button as={Link} to={`/manage/${event.id}`} color="orange" content="Manage Event"/>}
+
+        </Segment>
         </Segment.Group>
   )
 }
