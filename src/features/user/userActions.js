@@ -190,3 +190,26 @@ export const getUserEvents=(userId, activeTab)=>{
 
     }
 }
+
+export const addEventComment=(eventId, values, parentId)=>{
+    return async(dispatch,getState,{getFirebase})=>{
+        const firebase = getFirebase();
+        const profile = getState().firebase.profile;
+        const user = firebase.auth().currentUser;
+        console.log(parentId)
+        let newComment = {
+            displayName:profile.displayName,
+            photoURL: profile.photoURL || '/asset/user.png',
+            uid: user.uid,
+            text: values.comment,
+            date: Date.now(),
+            parentId:parentId
+        }
+        try{
+            await firebase.push(`event_chat/${eventId}`,newComment);
+        }catch(error){
+            console.log(error);
+            toastr.error('Fail','faile to comment')
+        }
+    }
+}
