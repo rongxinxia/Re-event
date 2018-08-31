@@ -1,43 +1,77 @@
 import React,{Component} from 'react';
-import {Grid} from 'semantic-ui-react';
+import {Grid, Loader} from 'semantic-ui-react';
 import EventList from '../EventList/EventList';
 import {connect} from 'react-redux'
-import {deleteEvent} from '../eventActions';
+import {getEventsForDashboard} from '../eventActions';
 import LoadingComponent from '../../../app/layout/loadingComponent'
 import EventActivity from '../EventActivity/EventActivity'
 import {firestoreConnect,isEmpty,isLoaded} from 'react-redux-firebase'
 
 class EventDashboard extends Component {
     state = {
-        isOpen:false,
-        selectedEvent:null
+        moreEvents:false,
+        loadingInitial:true,
+        loadedEvent: []
     };
 
     handleDeleteEvent=(eventId)=>()=>{
         this.props.deleteEvent(eventId);
     }
 
+    async componentDidMount(){
+        let next = await this.props.getEventsForDashboard();
+        //console.log(this.state.moreEvents);
+        if(next && next.docs && next.docs.length > 1){
+            this.setState({
+                moreEvents: true,
+                loadingInitial: false
+            })
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        //console.log(nextProps)
+        if(this.props.events!== nextProps.events){
+            this.setState({
+                loadedEvent:[...this.state.loadedEvent,...nextProps.events]
+            })
+        }
+        //console.log(this.state.loadedEvent)
+    }
+
+    getNextEvent=async()=>{
+        const {events} = this.props;
+        let lastEvent = events && events[events.length-1];
+        let next = await this.props.getEventsForDashboard(lastEvent);
+        if(next && next.docs && next.docs.length <= 1){
+            this.setState({moreEvents: false})
+        }
+    }
+
     render(){
-        if(isEmpty(this.props.events) || isLoaded(this.props.events)){
+        if(this.state.loadingInitial && (isEmpty(this.props.events) || !isLoaded(this.props.events))){
             return <LoadingComponent inverted={true}/>
         }
         return(
           <Grid>
               <Grid.Column width = {10}>
-                  <EventList  delete={this.handleDeleteEvent} events={this.props.events}/>
+                  <EventList getMoreevents={this.getNextEvent} loading={this.props.loading} moreEvents={this.state.moreEvents} delete={this.handleDeleteEvent} events={this.state.loadedEvent}/>
               </Grid.Column>
               <Grid.Column width = {6}>
                   <EventActivity/>
+              </Grid.Column>
+              <Grid.Column width={10}>
+              <Loader active={this.props.loading}/>
               </Grid.Column>
           </Grid>
         );
     }
 }
 
-const actions={deleteEvent};
+const actions={getEventsForDashboard};
 
 const mapState=(state)=>({
-    events: state.firestore.ordered.events,
+    events: state.events,
     loading:state.async.loading
 });
 

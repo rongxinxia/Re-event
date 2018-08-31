@@ -2,6 +2,8 @@ import moment from 'moment'
 import {toastr} from 'react-redux-toastr'
 import cuid from 'cuid'
 import {asyncActionStart,asyncActionFinish,asyncActionError} from '../async/asyncActions'
+import firebase from '../../app/config/config'
+import { FETCH_EVENT } from '../events/evenConst';
 
 export const updateProfile = (user) =>{
     return async (dispatch,getState,{getFirebase})=>{
@@ -145,5 +147,46 @@ export const cancelJoinEvent=(event)=>{
             console.log(error);
             toastr.error("Error",'Error in cancelling')
         }
+    }
+}
+
+export const getUserEvents=(userId, activeTab)=>{
+    return async(dispatch,getState)=>{
+        dispatch(asyncActionStart());
+        const firestore = firebase.firestore();
+        const today = new Date(Date.now());
+        let eventsRef = firestore.collection("event_attendee");
+        let query;
+        //console.log(userId)
+        switch(activeTab){
+            case 1: // past
+                query = eventsRef.where('userUid','==',userId).where('eventDate','<=',today).orderBy('eventDate','desc');
+                break;
+            case 2: // future
+                query = eventsRef.where('userUid','==',userId).where('eventDate','>=',today).orderBy('eventDate');
+                break;
+            case 3: // host
+                query = eventsRef.where('userUid','==',userId).where('host','==',true).orderBy('eventDate','desc');
+                break;
+            default:
+                query = eventsRef.where('userUid','==',userId).orderBy('eventDate','desc');
+        }
+
+        try{
+            //console.log(query);
+            let querySnap = await query.get();
+            let events = [];
+            for(let i=0; i<querySnap.docs.length; i++){
+                let evt = await firestore.collection('events').doc(querySnap.docs[i].data().eventId).get();
+                events.push({...evt.data(), id:evt.id})
+            }
+            //console.log(querySnap)
+            dispatch({type:FETCH_EVENT, payload:{events}})
+            dispatch(asyncActionFinish());
+        }catch(error){
+            console.log(error);
+            dispatch(asyncActionError());
+        }
+
     }
 }

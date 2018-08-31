@@ -9,7 +9,7 @@ class EventListItem extends Component {
   render() {
     const event = this.props.event;
     //const edit = this.props.edit;
-
+    //console.log(event.hostPhotoURL)
     //console.log(objectToArray(event.attendees))
     //const deleteEvent = this.props.delete
     return (

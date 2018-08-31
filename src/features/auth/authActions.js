@@ -34,7 +34,7 @@ export const signup =(user) =>{
             
             let newUser  = {
                 displayName: user.displayName,
-                createdAt:firestore.FieldValue.serverTimestamp()
+                createdAt:firestore.FieldValue.serverTimestamp(),
             }
 
             //console.log(newUser)

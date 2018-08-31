@@ -11,8 +11,15 @@ import UserEvent from './UserEvent';
 import  UserPhoto from './UserPhoto';
 import {query} from '../userQueries';
 import LoadingComponent from '../../../app/layout/loadingComponent'
+import {getUserEvents} from '../userActions'
 
 class UserDetailedPage extends Component {
+    async componentDidMount(){
+        await this.props.getUserEvents(this.props.userUid,3);
+    }
+    changeTab = (e,data) =>{
+        this.props.getUserEvents(this.props.userUid,data.activeIndex)
+    }
     
     render() {
         const isCurrentUser = this.props.auth.uid === this.props.match.params.id;
@@ -48,7 +55,7 @@ class UserDetailedPage extends Component {
                 <Grid.Column width={12}>
                   <UserPhoto photos={this.props.photos}/>
                 </Grid.Column>
-                  <UserEvent events={this.props.events}/>
+                  <UserEvent events={this.props.events} eventsLoading={this.props.loading} changeTab={this.changeTab}/>
                 <Grid.Column width={12}>
 
                 </Grid.Column>
@@ -80,7 +87,6 @@ const mapState=(state,ownProps)=>{
     }
 }
 
-const actions={
-}
+const actions={getUserEvents};
 
 export default compose(connect(mapState, actions), firestoreConnect((auth,userUid) => query(auth,userUid)))(UserDetailedPage)

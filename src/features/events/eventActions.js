@@ -4,6 +4,7 @@ import {fetchSampleData} from '../../app/data/mockApi'
 import {toastr} from 'react-redux-toastr'
 import {createNewEvent} from '../../app/common/util/helpers'
 import moment from 'moment'
+import firebase from '../../app/config/config'
 
 export const createEvent =(event)=>{
     return async (dispatch,getState,{getFirestore})=>{
@@ -42,7 +43,7 @@ export const updateEvent =(event)=>{
     }
 }
 
-export const deleteEvent =(eventId)=>{
+/*export const deleteEvent =(eventId)=>{
     return async dispatch=>{
         try{
             dispatch({
@@ -54,9 +55,9 @@ export const deleteEvent =(eventId)=>{
             toastr.error('Fail','Something wrong')
         }
     }
-}
+}*/
 
-export const fetchEvent =(events)=>{
+/*export const fetchEvent =(events)=>{
       return async dispatch=>{
         try{
             dispatch({
@@ -69,9 +70,9 @@ export const fetchEvent =(events)=>{
         }
     }
 
-}
+}*/
 
-export const loadEvents =()=>{
+/*export const loadEvents =()=>{
     return async dispatch=>{
         try{
             dispatch(asyncActionStart());
@@ -82,7 +83,7 @@ export const loadEvents =()=>{
             dispatch(asyncActionError());
         }
     }
-}
+}*/
 
 export const cancelEvent =(cancelled,eventId)=>{
     return async(dispatch,getState,{getFirestore} )=>{
@@ -97,6 +98,37 @@ export const cancelEvent =(cancelled,eventId)=>{
               });
         }catch(error){
 
+        }
+    }
+}
+
+export const getEventsForDashboard =(lastEvent)=>{
+    return async(dispatch, getState)=>{
+        let today = new Date(Date.now());
+        const firestore = firebase.firestore();
+        const eventRef = firestore.collection('events')
+        //console.log(eventQuery);
+        try{
+            dispatch(asyncActionStart());
+            let startAfter = lastEvent && await firestore.collection('events').doc(lastEvent.id).get()
+            let query;
+            lastEvent? query = eventRef.where('date','>=',today).orderBy('date').startAfter(startAfter).limit(2)
+            : query = eventRef.where('date','>=',today).orderBy('date').limit(2);
+            let querySnap = await query.get()
+            if(querySnap.docs.length===0){
+                dispatch(asyncActionFinish());
+                return querySnap;
+            }
+            let events=[];
+            for(let i=0; i<querySnap.docs.length; i++){
+                let event = {...querySnap.docs[i].data(), id:querySnap.docs[i].id}
+                events.push(event);
+            }
+            dispatch({type:FETCH_EVENT,payload:{events}})
+            dispatch(asyncActionFinish());
+            return querySnap;
+        }catch(error){
+            console.log(error)
         }
     }
 }
