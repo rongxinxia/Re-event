@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {Button, Grid, Segment} from "semantic-ui-react";
+import {Grid, Segment} from "semantic-ui-react";
 import {connect} from 'react-redux';
 import {firestoreConnect,isEmpty} from 'react-redux-firebase'
-import {Link} from 'react-router-dom'
 import {compose} from 'redux'
 import  UserHeader from './UserHeader';
 import UserAbout from './UserAbout';
@@ -11,11 +10,17 @@ import UserEvent from './UserEvent';
 import  UserPhoto from './UserPhoto';
 import {query} from '../userQueries';
 import LoadingComponent from '../../../app/layout/loadingComponent'
-import {getUserEvents, followUser, unFollowUser} from '../userActions'
-import UserSidebar from './UserSidebar'
+import {getUserEvents} from '../userActions'
+//import UserSidebar from './UserSidebar'
+import {toastr} from 'react-redux-toastr'
 
 class UserDetailedPage extends Component {
     async componentDidMount(){
+        let user = await this.props.firestore.get(`users/${this.props.match.params.id}`)
+        if (!user.exists) {
+            toastr.error('Not found', 'This is not the user you are looking for')
+            this.props.history.push('/error');
+        }
         await this.props.getUserEvents(this.props.userUid,3);
     }
     changeTab = (e,data) =>{
@@ -23,8 +28,8 @@ class UserDetailedPage extends Component {
     }
     
     render() {
-        const isCurrentUser = this.props.auth.uid === this.props.match.params.id;
-        const loading = Object.values(this.props.requesting).some(a=>a===true);
+        //const isCurrentUser = this.props.auth.uid === this.props.match.params.id;
+        const loading = this.props.requesting[`user/${this.props.match.params.id}`]
         if(loading){
             return <LoadingComponent/>
         }

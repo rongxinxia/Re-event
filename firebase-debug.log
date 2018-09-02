@@ -1,0 +1,32 @@
+[debug] [2018-09-02T20:36:24.413Z] ----------------------------------------------------------------------
+[debug] [2018-09-02T20:36:24.415Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2018-09-02T20:36:24.416Z] CLI Version:   4.2.1
+[debug] [2018-09-02T20:36:24.416Z] Platform:      darwin
+[debug] [2018-09-02T20:36:24.416Z] Node Version:  v8.9.3
+[debug] [2018-09-02T20:36:24.416Z] Time:          Sun Sep 02 2018 16:36:24 GMT-0400 (EDT)
+[debug] [2018-09-02T20:36:24.416Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-09-02T20:36:24.426Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-09-02T20:36:24.426Z] > authorizing via signed-in user
+[debug] [2018-09-02T20:36:24.428Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-09-02T20:36:24.428Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+
+[debug] [2018-09-02T20:36:24.607Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-02T20:36:24.622Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/revents-212318  
+ 
+[debug] [2018-09-02T20:36:24.913Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'revents-212318'...
+[info] 
+[info] i  deploying database, storage, firestore, functions, hosting
+[debug] [2018-09-02T20:36:25.020Z] TypeError: Path must be a string. Received undefined
+    at assertPath (path.js:28:11)
+    at Object.join (path.js:1251:7)
+    at Config.path (/usr/local/lib/node_modules/firebase-tools/lib/config.js:166:37)
+    at /usr/local/lib/node_modules/firebase-tools/lib/deploy/lifecycleHooks.js:68:38
+    at _chain (/usr/local/lib/node_modules/firebase-tools/lib/deploy/index.js:26:38)
+    at /usr/local/lib/node_modules/firebase-tools/lib/deploy/index.js:29:14
+    at <anonymous>
+    at process._tickDomainCallback (internal/process/next_tick.js:228:7)
+[error] 
+[error] Error: An unexpected error has occurred.

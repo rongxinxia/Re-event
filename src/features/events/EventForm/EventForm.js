@@ -154,13 +154,14 @@ class EventForm extends Component {
                     Submit
                   </Button>
                   <Button disabled={this.props.loading} type="button" onClick={this.props.history.goBack}>Cancel</Button>
-                  <Button
+                  {event.id && 
+                    <Button
                     onClick={()=>this.props.cancelEvent(!event.cancelled,event.id)}
                     type='button'
                     color={event.cancelled ?'green':'red'}
                     floated='right'
                     content={event.cancelled ? 'Reacitivated Event':'Cancel Event'}
-                  />
+                  />}
                 </Form>
             </Segment>
             </Grid.Column>

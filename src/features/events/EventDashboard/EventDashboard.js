@@ -3,9 +3,7 @@ import {Grid, Loader} from 'semantic-ui-react';
 import EventList from '../EventList/EventList';
 import {connect} from 'react-redux'
 import {getEventsForDashboard} from '../eventActions';
-import LoadingComponent from '../../../app/layout/loadingComponent'
-import EventActivity from '../EventActivity/EventActivity'
-import {firestoreConnect,isEmpty,isLoaded} from 'react-redux-firebase'
+import {firestoreConnect} from 'react-redux-firebase'
 
 class EventDashboard extends Component {
     state = {

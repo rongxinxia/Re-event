@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 //import {objectToArray} from '../../../app/common/util/helpers'
 
 const EventDetailsSiderbar = ({attendees}) => {
-    const isHost = false;
+  //console.log(attendees)
   return (
        <div>
           <Segment
@@ -21,14 +21,10 @@ const EventDetailsSiderbar = ({attendees}) => {
             <List relaxed divided>
             {attendees && attendees.map((attendee)=>(
                      <Item key={attendee.id} style={{ position: 'relative' }}>
-                     {isHost && 
-                     <Label
-                       style={{ position: 'absolute' }}
-                       color="orange"
-                       ribbon="right"
-                     >
-                       Host
-                     </Label>}
+                     {attendee.host && (
+                      <Label style={{ position: 'absolute' }} color="orange" ribbon="right">
+                      Host
+                      </Label>)}
                      <Item.Image size="tiny" src={attendee.photoURL} />
                      <Item.Content verticalAlign="middle">
                        <Item.Header as="h3">

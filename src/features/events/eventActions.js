@@ -1,6 +1,5 @@
-import {DELETE_EVENT,FETCH_EVENT} from './evenConst';
+import {FETCH_EVENT} from './evenConst';
 import {asyncActionError,asyncActionFinish,asyncActionStart} from '../async/asyncActions'
-import {fetchSampleData} from '../../app/data/mockApi'
 import {toastr} from 'react-redux-toastr'
 import {createNewEvent} from '../../app/common/util/helpers'
 import moment from 'moment'
@@ -21,8 +20,10 @@ export const createEvent =(event)=>{
                 eventDate: event.date,
                 host:true 
             })
+            console.log('attenddees')
             toastr.success('Success','Event has been created');
         }catch(error){
+            console.log(error)
             toastr.error('Fail','Something wrong')
         }
     }
