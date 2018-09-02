@@ -52,7 +52,7 @@ class EventDetailsChat extends Component{
                   <Comment.Text>{comment.text}</Comment.Text>
                   <Comment.Actions>
                     <Comment.Action onClick={this.handleOpenReplyForm(comment.id)}>Reply</Comment.Action>
-                    {showReplyForm && selectedId==comment.id &&
+                    {showReplyForm && selectedId===comment.id &&
                       <EventDetailsChatForm  addEventComment={addEventComment} 
                       eventId={eventId} 
                       form={`reply_${comment.id}`} 
@@ -74,7 +74,7 @@ class EventDetailsChat extends Component{
                     <Comment.Text>{child.text}</Comment.Text>
                     <Comment.Actions>
                       <Comment.Action onClick={this.handleOpenReplyForm(child.id)}>Reply</Comment.Action>
-                      {showReplyForm && selectedId==child.id &&
+                      {showReplyForm && selectedId===child.id &&
                         <EventDetailsChatForm  addEventComment={addEventComment} 
                         eventId={eventId} 
                         form={`reply_${child.id}`} 

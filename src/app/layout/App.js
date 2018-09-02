@@ -10,7 +10,8 @@ import SettingDashboard from '../../features/user/Settings/SettingDashboard';
 import EventForm from '../../features/events/EventForm/EventForm';
 import HomePage from '../../features/home/HomePage';
 import test from '../../features/test/test';
-import ModalManager from '../../features/modal/modalManager'
+import ModalManager from '../../features/modal/modalManager';
+import {UserIsAuthenticated} from '../../features/auth/authWrapper'
 
 
 //import logo from '../../logo.svg';
@@ -31,12 +32,10 @@ class App extends Component {
           <Switch>
             <Route path='/events' component={EventDashboard}/>
             <Route path='/event/:id' component={EventDetailsPage}/>
-            <Route path='/manage/:id' component={EventForm}/>
-            <Route path='/people' component={PeopleDashboard}/>
-            <Route path='/profile/:id' component={UserDetailsPage}/>
-            <Route path='/settings' component={SettingDashboard}/>
-            <Route path='/createEvent' component={EventForm}/>
-            <Route path='/test' component={test}/>
+            <Route path='/manage/:id' component={UserIsAuthenticated(EventForm)}/>
+            <Route path='/profile/:id' component={UserIsAuthenticated(UserDetailsPage)}/>
+            <Route path='/settings' component={UserIsAuthenticated(SettingDashboard)}/>
+            <Route path='/createEvent' component={UserIsAuthenticated(EventForm)}/>
           </Switch>
           </Container>
         </div>

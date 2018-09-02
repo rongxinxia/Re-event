@@ -3,11 +3,13 @@ import { connect } from 'react-redux'
 import TestModal from './TestModal'
 import LoginModal from './loginModal'
 import RegisterModal from './registerModal'
+import UnauthModal from './authModal'
 
 const modalLookup = {
     TestModal,
     LoginModal,
-    RegisterModal
+    RegisterModal,
+    UnauthModal
 
 }
 
