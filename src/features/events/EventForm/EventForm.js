@@ -23,7 +23,8 @@ const mapState =(state)=>{
         event = state.firestore.ordered.events[0];
     }
     return {initialValues: event,
-    event}
+    event,
+    loading: state.async.loading}
 };
 
 const actions ={createEvent,updateEvent,cancelEvent};
@@ -92,13 +93,13 @@ class EventForm extends Component {
         await firestore.unsetListener(`events/${match.params.id}`);
     }
    
-    onFormSubmit=values=>{
+    onFormSubmit=async values=>{
         values.venueLatLng = this.state.venuelag;
         if(this.props.initialValues.id){
             if(Object.keys(values.venueLatLng).length===0){
                 values.venueLatLng = this.props.event.venueLatLng
             }
-            this.props.updateEvent(values);
+            await this.props.updateEvent(values);
             this.props.history.goBack();
         }else{
             this.props.createEvent(values);
@@ -149,10 +150,10 @@ class EventForm extends Component {
                 placeholder="Date and Time of Event"
               />
                 
-                  <Button positive disabled={invalid||submitting||pristine} type="submit">
+                  <Button positive loading={this.props.loading} disabled={invalid||submitting||pristine} type="submit">
                     Submit
                   </Button>
-                  <Button type="button" onClick={this.props.history.goBack}>Cancel</Button>
+                  <Button disabled={this.props.loading} type="button" onClick={this.props.history.goBack}>Cancel</Button>
                   <Button
                     onClick={()=>this.props.cancelEvent(!event.cancelled,event.id)}
                     type='button'

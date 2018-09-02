@@ -20,7 +20,6 @@ class EventDashboard extends Component {
 
     async componentDidMount(){
         let next = await this.props.getEventsForDashboard();
-        //console.log(this.state.moreEvents);
         if(next && next.docs && next.docs.length > 1){
             this.setState({
                 moreEvents: true,
@@ -49,18 +48,15 @@ class EventDashboard extends Component {
     }
 
     render(){
-        if(this.state.loadingInitial && (isEmpty(this.props.events) || !isLoaded(this.props.events))){
-            return <LoadingComponent inverted={true}/>
-        }
+        //if(this.state.loadingInitial && (isEmpty(this.props.events) || !isLoaded(this.props.events))){
+          //  return <LoadingComponent inverted={true}/>
+       //}
         return(
           <Grid>
-              <Grid.Column width = {10}>
+              <Grid.Column width = {16}>
                   <EventList getMoreevents={this.getNextEvent} loading={this.props.loading} moreEvents={this.state.moreEvents} delete={this.handleDeleteEvent} events={this.state.loadedEvent}/>
               </Grid.Column>
-              <Grid.Column width = {6}>
-                  <EventActivity/>
-              </Grid.Column>
-              <Grid.Column width={10}>
+              <Grid.Column width={16}>
               <Loader active={this.props.loading}/>
               </Grid.Column>
           </Grid>

@@ -142,7 +142,7 @@ class PhotosPage extends Component {
                             src={photo.url}
                         />
                         <div className='ui two buttons'>
-                            <Button onClick={this.setMainPhoto(photo)} basic color='green'>Main</Button>
+                            <Button loading={this.props.loading} onClick={this.setMainPhoto(photo)} basic color='green'>Main</Button>
                             <Button onClick={this.photoDelete(photo)} basic icon='trash' color='red' />
                         </div>
                     </Card>

@@ -5,6 +5,7 @@ import {toastr} from 'react-redux-toastr'
 import {createNewEvent} from '../../app/common/util/helpers'
 import moment from 'moment'
 import firebase from '../../app/config/config'
+import compareAsc from 'date-fns/compare_asc'
 
 export const createEvent =(event)=>{
     return async (dispatch,getState,{getFirestore})=>{
@@ -27,63 +28,43 @@ export const createEvent =(event)=>{
     }
 }
 
-export const updateEvent =(event)=>{
-
-    return async (dispatch, getState, {getFirestore})=>{
-        const firestore = getFirestore();
-        if(event.date !== getState().firestore.ordered.events[0].data){
-            event.date = moment(event.date).toDate();
+export const updateEvent = event => {
+    return async (dispatch, getState) => {
+      dispatch(asyncActionStart());
+      const firestore = firebase.firestore();
+      event.date = moment(event.date).toDate();
+      try {
+        let eventDocRef = firestore.collection('events').doc(event.id);
+        let dateEqual = compareAsc(getState().firestore.ordered.events[0].date, event.date);
+        if (dateEqual !== 0) {
+          let batch = firestore.batch();
+          await batch.update(eventDocRef, event);
+  
+          let eventAttendeeRef = firestore.collection('event_attendee');
+          let eventAttendeeQuery = await eventAttendeeRef.where('eventId', '==', event.id);
+          let eventAttendeeQuerySnap = await eventAttendeeQuery.get();
+  
+          for (let i = 0; i < eventAttendeeQuerySnap.docs.length; i++) {
+            let eventAttendeeDocRef = await firestore
+              .collection('event_attendee')
+              .doc(eventAttendeeQuerySnap.docs[i].id);
+            
+            await batch.update(eventAttendeeDocRef, {
+              eventDate: event.date
+            })
+          }
+          await batch.commit();
+        } else {
+          await eventDocRef.update(event);
         }
-        try{
-            await firestore.update(`events/${event.id}`,event);
-            toastr.success('Success','Event has been updated');
-        }catch(error){
-            toastr.error('Fail','Something wrong')
-        }
-    }
-}
-
-/*export const deleteEvent =(eventId)=>{
-    return async dispatch=>{
-        try{
-            dispatch({
-                type:DELETE_EVENT,
-                payload:{eventId}
-        })
-        toastr.success('Success','Event has been delete')
-        }catch(error){
-            toastr.error('Fail','Something wrong')
-        }
-    }
-}*/
-
-/*export const fetchEvent =(events)=>{
-      return async dispatch=>{
-        try{
-            dispatch({
-                type:FETCH_EVENT,
-                payload:{events}
-        })
-        toastr.success('Success','Event has been fetched')
-        }catch(error){
-            toastr.error('Fail','Something wrong')
-        }
-    }
-
-}*/
-
-/*export const loadEvents =()=>{
-    return async dispatch=>{
-        try{
-            dispatch(asyncActionStart());
-            let events = await fetchSampleData();
-            dispatch(fetchEvent(events.events));
-            dispatch(asyncActionFinish())
-        }catch(error){
-            dispatch(asyncActionError());
-        }
-    }
-}*/
+        dispatch(asyncActionFinish());
+        toastr.success('Success!', 'Event has been updated');
+      } catch (error) {
+        dispatch(asyncActionError());
+        toastr.error('Oops', 'Something went wrong');
+      }
+    };
+  };
 
 export const cancelEvent =(cancelled,eventId)=>{
     return async(dispatch,getState,{getFirestore} )=>{

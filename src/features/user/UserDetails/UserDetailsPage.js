@@ -11,7 +11,8 @@ import UserEvent from './UserEvent';
 import  UserPhoto from './UserPhoto';
 import {query} from '../userQueries';
 import LoadingComponent from '../../../app/layout/loadingComponent'
-import {getUserEvents} from '../userActions'
+import {getUserEvents, followUser, unFollowUser} from '../userActions'
+import UserSidebar from './UserSidebar'
 
 class UserDetailedPage extends Component {
     async componentDidMount(){
@@ -32,7 +33,7 @@ class UserDetailedPage extends Component {
                 <Grid.Column width={16}>
                     <UserHeader profile={this.props.profile}/>
                 </Grid.Column> 
-                <Grid.Column width={12}>
+                <Grid.Column width={16}>
                     <Segment>
                         <Grid columns={2}>
                             <Grid.Column width={10}>
@@ -43,12 +44,6 @@ class UserDetailedPage extends Component {
                             </Grid.Column>
                         </Grid>
 
-                    </Segment>
-                </Grid.Column>
-                <Grid.Column width={4}>
-                    <Segment>
-                        {isCurrentUser &&<Button as={Link} to='/setting' color='teal' fluid basic content='Edit Profile'/>}
-                        {!isCurrentUser && <Button color='teal' fluid basic content='Follow User'/>}
                     </Segment>
                 </Grid.Column>
 
@@ -83,7 +78,7 @@ const mapState=(state,ownProps)=>{
         photos: state.firestore.ordered.photos,
         loading: state.async.loading,
         events: state.events,
-        requesting: state.firestore.status.requesting
+        requesting: state.firestore.status.requesting,
     }
 }
 

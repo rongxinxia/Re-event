@@ -26,7 +26,6 @@ class EventDetailsChat extends Component{
   
   render(){
     const {addEventComment, eventId, eventChat} = this.props;
-    console.log(eventChat)
     const {showReplyForm, selectedId} = this.state;
     return (
       <div>

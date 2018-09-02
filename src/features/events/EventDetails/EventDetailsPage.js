@@ -38,11 +38,10 @@ class EventDetailsPage extends Component {
   render() {
     const {event,auth,joinEvent,cancelJoinEvent,addEventComment,eventChat} = this.props;
     const attendees = event && event.attendees && objectToArray(event.attendees)
-    const isHost = event.isHost === auth.uid;
+    const isHost = event.hostUid === auth.uid;
     const isGoing = attendees && attendees.some(a=>a.id===auth.uid);
-    console.log(eventChat)
     const chatTree = !isEmpty(eventChat) && createDataTree(eventChat)
-    console.log(eventChat)
+    //console.log(eventChat)
     return (
       <Grid>
       <Grid.Column width={10}>

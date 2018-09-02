@@ -40,8 +40,6 @@ class NavBar extends Component{
                         Re-vents
                       </Menu.Item>
                       <Menu.Item as={Link} to='/events' name="Events" />
-                      <Menu.Item as={Link} to='/test' name="Test" />
-                      {sign && <Menu.Item as={Link} to='/people' name="People" />}
                       {sign && <Menu.Item>
                         <Button as={Link} to='/createEvent' floated="right" positive inverted content="Create Event" />
                       </Menu.Item>}
