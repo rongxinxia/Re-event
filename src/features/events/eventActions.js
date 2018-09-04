@@ -20,7 +20,6 @@ export const createEvent =(event)=>{
                 eventDate: event.date,
                 host:true 
             })
-            console.log('attenddees')
             toastr.success('Success','Event has been created');
         }catch(error){
             console.log(error)

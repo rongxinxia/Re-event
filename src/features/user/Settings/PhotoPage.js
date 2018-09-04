@@ -132,7 +132,7 @@ class PhotosPage extends Component {
 
                 <Card.Group itemsPerRow={5}>
                     <Card>
-                        <Image src={this.props.profile.photoURL || 'assets/user.png'}/>
+                        <Image src={this.props.profile.photoURL || '/assets/user.png'}/>
                         <Button positive >Main Photo</Button>
                     </Card>
 

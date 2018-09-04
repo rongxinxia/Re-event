@@ -21,8 +21,9 @@ class UserDetailedPage extends Component {
             toastr.error('Not found', 'This is not the user you are looking for')
             this.props.history.push('/error');
         }
-        await this.props.getUserEvents(this.props.userUid,3);
+        await this.props.getUserEvents(this.props.userUid,0);
     }
+
     changeTab = (e,data) =>{
         this.props.getUserEvents(this.props.userUid,data.activeIndex)
     }
@@ -52,12 +53,12 @@ class UserDetailedPage extends Component {
                     </Segment>
                 </Grid.Column>
 
-                <Grid.Column width={12}>
+                <Grid.Column width={16}>
                   <UserPhoto photos={this.props.photos}/>
                 </Grid.Column>
-                  <UserEvent events={this.props.events} eventsLoading={this.props.loading} changeTab={this.changeTab}/>
-                <Grid.Column width={12}>
-
+                  
+                <Grid.Column width={16}>
+                <UserEvent events={this.props.events} eventsLoading={this.props.loading} changeTab={this.changeTab}/>
                 </Grid.Column>
             </Grid>
 

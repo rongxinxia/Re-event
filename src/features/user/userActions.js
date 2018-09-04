@@ -223,7 +223,7 @@ export const getUserEvents=(userId, activeTab)=>{
                 let evt = await firestore.collection('events').doc(querySnap.docs[i].data().eventId).get();
                 events.push({...evt.data(), id:evt.id})
             }
-            //console.log(querySnap)
+            //console.log(events)
             dispatch({type:FETCH_EVENT, payload:{events}})
             dispatch(asyncActionFinish());
         }catch(error){

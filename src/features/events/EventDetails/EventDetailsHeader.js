@@ -47,8 +47,8 @@ const EventDetailsHeader = ({authed, openModal, event,isHost,isGoing,joinEvent,c
     
           <Segment attached="bottom">
           {!isHost && isGoing && <Button onClick={()=>cancelJoinEvent(event)}>Cancel My Place</Button>}
-          {!isHost && !isGoing && authed && event.cancelled && <Button onClick={()=>joinEvent(event)}color="teal">JOIN THIS EVENT</Button>}
-          {!isHost && !authed && event.cancelled &&  <Button onClick={()=>openModal('UnauthModal')}color="teal">JOIN THIS EVENT</Button>}
+          {!isHost && !isGoing && authed && !event.cancelled && <Button onClick={()=>joinEvent(event)}color="teal">JOIN THIS EVENT</Button>}
+          {!isHost && !authed && !event.cancelled &&  <Button onClick={()=>openModal('UnauthModal')}color="teal">JOIN THIS EVENT</Button>}
           {isHost &&<Button as={Link} to={`/manage/${event.id}`} color="orange" content="Manage Event"/>}
           {event.cancelled && !isHost && <Label size='large' color='red' content='This event has been cancelled'/>}
         </Segment>

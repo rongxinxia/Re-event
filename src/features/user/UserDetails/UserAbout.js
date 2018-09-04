@@ -9,7 +9,7 @@ const UserAbout = ({profile}) => {
     }
   return (
     <div>
-    <Header icon='smile' content='About Display Name'/>
+    <Header icon='smile' content={`About ${profile.displayName}`}/>
     <p>I am a: <strong>{profile.occupation || 'tbn'}</strong></p>
     <p>Originally from <strong>{profile.city || 'tbn'}</strong></p>
     <p>Member Since: <strong>{createdAt || 'tbn'}</strong></p>
