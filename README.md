@@ -50,7 +50,7 @@ Frontend is based on React, mainly divided for three components:
 
 |3| User
 
-All three are in src/features
+All three are in src/features.
 
 The components routing is achieved by React-Router and the global states are maintained by React-Redux.
 
